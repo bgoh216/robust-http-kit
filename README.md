@@ -1,6 +1,7 @@
 # robust-http-kit
 
 A flexible and powerful HTTP client for TypeScript with built-in middleware support and customizable error handling.
+Idea is a plug-and-play HTTP toolkit library, supporting attaching/dettaching of error handlers, middlewares while strictly enforcing handling of errors.
 
 ## Features
 
