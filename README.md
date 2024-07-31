@@ -216,11 +216,3 @@ const client = new FetchHttpClient({ baseUrl: 'https://api.example.com' });
 const response = await client.get<User>('/users/1');
 console.log(response.data.name); // TypeScript knows that 'name' exists on User
 ```
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for more information.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
