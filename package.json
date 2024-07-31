@@ -1,0 +1,56 @@
+{
+    "name": "robust-http-kit",
+    "version": "1.0.0",
+    "description": "A robust HTTP client library with TypeScript support",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "lint": "eslint . --ext .ts",
+        "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run lint",
+        "preversion": "npm run lint",
+        "version": "npm run format && git add -A src",
+        "postversion": "git push && git push --tags"
+    },
+    "keywords": [
+        "http",
+        "client",
+        "typescript",
+        "axios",
+        "fetch"
+    ],
+    "author": "Your Name",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.7.2"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.5.1",
+        "@types/node": "^16.11.36",
+        "@typescript-eslint/eslint-plugin": "^5.26.0",
+        "@typescript-eslint/parser": "^5.26.0",
+        "eslint": "^8.16.0",
+        "prettier": "^2.6.2",
+        "ts-jest": "^29.2.3",
+        "ts-node": "^10.9.2",
+        "typescript": "^4.7.2"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yourusername/robust-http-kit.git"
+    },
+    "bugs": {
+        "url": "https://github.com/yourusername/robust-http-kit/issues"
+    },
+    "homepage": "https://github.com/yourusername/robust-http-kit#readme",
+    "engines": {
+        "node": ">=14.0.0"
+    }
+}
