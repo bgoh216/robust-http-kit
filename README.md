@@ -3,6 +3,10 @@
 A flexible and powerful HTTP client for TypeScript with built-in middleware support and customizable error handling.
 Idea is a plug-and-play HTTP toolkit library, supporting attaching/dettaching of error handlers, middlewares while strictly enforcing handling of errors.
 
+# Inspiration
+![robust-http-kit_idea drawio](https://github.com/user-attachments/assets/7f9113c4-1a1e-4a1c-bec4-40ca8eff037c)
+
+
 ## Features
 
 - Support for both Fetch API and Axios
