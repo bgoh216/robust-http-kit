@@ -56,9 +56,9 @@ export class AxiosHttpClient implements IHttpClient {
                     data: error.response?.data,
                     headers: error.response?.headers as Record<string, string>,
                     url: error.config?.url || '',
-                    method: error.config?.method?.toUpperCase() as HttpMethod || ''
+                    method: error.config?.method?.toUpperCase() as HttpMethod
                 }
-                return errorHandler.handleError(errorContext);
+                return errorHandler.handleError(errorContext) as HttpResponse<T>;
             }
 
             console.error('Unexpected error:', error);
@@ -70,11 +70,11 @@ export class AxiosHttpClient implements IHttpClient {
         return this.request<T>({ ...config, method: 'GET', url }, errorHandler);
     }
 
-    post<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    post<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'POST', url, data }, errorHandler);
     }
 
-    put<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    put<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'PUT', url, data }, errorHandler);
     }
 
@@ -82,7 +82,7 @@ export class AxiosHttpClient implements IHttpClient {
         return this.request<T>({ ...config, method: 'DELETE', url }, errorHandler);
     }
 
-    patch<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    patch<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'PATCH', url, data }, errorHandler);
     }
 

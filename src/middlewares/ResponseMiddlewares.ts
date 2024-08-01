@@ -27,7 +27,7 @@ export class ResponseTimeMiddleware implements IResponseMiddleware {
 }
 
 export class DataTransformMiddleware implements IResponseMiddleware {
-  constructor(private transformFn: (data: any) => any) { }
+  constructor(private transformFn: (data: unknown) => unknown) { }
 
   processResponse<T>(response: HttpResponse<T>): HttpResponse<T> {
     return {

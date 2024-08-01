@@ -4,7 +4,7 @@ import { HttpMethod } from "./HttpMethod";
 export type ErrorContext = {
     status?: number;
     statusText?: string;
-    data?: any;
+    data?: unknown;
     headers: Record<string, string>;
     url: string;
     method: HttpMethod;

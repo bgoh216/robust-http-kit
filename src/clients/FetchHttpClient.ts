@@ -19,7 +19,7 @@ export class FetchHttpClient implements IHttpClient {
         this.defaultErrorHandler = defaultErrorHandler;
     }
 
-    async request<T>(config: IHttpClientConfig, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    async request<T>(config: IHttpClientConfig, errorHandler: IErrorHandler = this.defaultErrorHandler): Promise<HttpResponse<T>> {
         const fullUrl = new URL(config.url, this.baseUrl);
         const processedConfig = this.applyRequestMiddlewares(config);
 
@@ -35,10 +35,10 @@ export class FetchHttpClient implements IHttpClient {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const responseData: T = await this.parseResponse(response, processedConfig.responseType);
+            const responseData = await this.parseResponse(response, processedConfig.responseType);
 
             let httpResponse: HttpResponse<T> = {
-                data: responseData,
+                data: responseData as T,
                 status: response.status,
                 headers: Object.fromEntries(response.headers.entries()),
             };
@@ -47,7 +47,7 @@ export class FetchHttpClient implements IHttpClient {
 
             return httpResponse;
         } catch (error: unknown) {
-            return this.defaultErrorHandler.handleError(error as ErrorContext);
+            return errorHandler.handleError(error as ErrorContext) as HttpResponse<T>;
         }
     }
 
@@ -55,11 +55,11 @@ export class FetchHttpClient implements IHttpClient {
         return this.request<T>({ ...config, method: 'GET', url }, errorHandler);
     }
 
-    post<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    post<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'POST', url, data }, errorHandler);
     }
 
-    put<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    put<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'PUT', url, data }, errorHandler);
     }
 
@@ -67,7 +67,7 @@ export class FetchHttpClient implements IHttpClient {
         return this.request<T>({ ...config, method: 'DELETE', url }, errorHandler);
     }
 
-    patch<T>(url: string, data?: any, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
+    patch<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
         return this.request<T>({ ...config, method: 'PATCH', url, data }, errorHandler);
     }
 
@@ -87,7 +87,7 @@ export class FetchHttpClient implements IHttpClient {
         return this.responseMiddlewares.reduce((resp, middleware) => middleware.processResponse(resp), response);
     }
 
-    private async parseResponse(response: Response, responseType?: string): Promise<any> {
+    private async parseResponse(response: Response, responseType?: string): Promise<unknown> {
         switch (responseType) {
             case 'json':
                 return response.json();

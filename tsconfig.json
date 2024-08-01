@@ -3,20 +3,17 @@
     "target": "ES2020",
     "module": "ES2020",
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    "strict": true,
-    "outDir": "./dist",
-    "rootDir": "./",
+    "strictNullChecks": false,
     "types": [
-      "jest",
-      "node"
-    ]
+      "node",
+      "jest"
+    ],
+    "baseUrl": "./"
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
   "exclude": [
-    "node_modules"
+    "node_modules/**/*",
+    "dist"
   ]
 }

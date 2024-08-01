@@ -5,7 +5,7 @@ export interface IHttpClientConfig {
     method: HttpMethod;
     url: string;
     headers?: Record<string, string>;
-    data?: any;
+    data?: unknown;
     params?: Record<string, string>;
     responseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
     timeout?: number;
