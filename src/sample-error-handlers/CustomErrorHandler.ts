@@ -2,27 +2,25 @@ import { IErrorHandler } from "../interfaces/IErrorHandler";
 import { ErrorContext } from "../interfaces/ErrorContext";
 
 export class CustomErrorHandler implements IErrorHandler {
-    handleError(error: ErrorContext): void {
-        console.error(`Error in ${error.method} request to ${error.url}`);
+    // Other informations such as counts, users failed, etc...
+    // Can be parked here
+    // Can be used as a Singleton pattern to log out these informations
 
-        switch (error.status) {
-            case 400:
-                console.error('Bad Request: The server could not understand the request.');
-                break;
-            case 401:
-                console.error('Unauthorized: Authentication is required and has failed or has not been provided.');
-                break;
-            case 403:
-                console.error('Forbidden: The server understood the request but refuses to authorize it.');
-                break;
-            case 404:
-                console.error('Not Found: The requested resource could not be found.');
-                break;
-            case 500:
-                console.error('Internal Server Error: The server has encountered a situation it does not know how to handle.');
-                break;
-            default:
-                console.error(`Unhandled error status: ${status}`);
+    handleError<ErrorType>(errorContext: ErrorContext): ErrorType | never {
+        if (errorContext.status == 300) {
+            console.log('Redirecting');
+            return { isRedirected: true, url: 'new-redirected-url' } as ErrorType;
         }
+
+        if (errorContext.status == 400) {
+            console.warn('Bad request');
+        }
+    
+        if (errorContext.status == 500) {
+            console.error('Internal Server Error');
+            throw errorContext;
+        }
+    
+        throw new Error("Method not implemented.");
     }
 }

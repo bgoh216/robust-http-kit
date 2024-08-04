@@ -20,25 +20,33 @@ npm install robust-http-kit
 ## Basic Usage
 
 ```typescript
-import { FetchHttpClient, CustomErrorHandler } from 'robust-http-kit';
+import { AxiosHttpClient, CustomErrorHandler } from 'robust-http-kit';
 
-const client = new FetchHttpClient({
-  baseUrl: 'https://api.example.com',
-});
+type User = {
+    id: number,
+    name: string
+};
+
+type UserError = {
+    id: user,
+    name: string,
+    redirect: string,
+    errorId: number
+}
+
+const client = new AxiosHttpClient(
+  { baseUrl: 'https://api.example.com' }, 
+  new defaultErrorHandler()
+);
 
 const errorHandler = new CustomErrorHandler();
 
 async function fetchUser(id: number) {
-  try {
-    const response = await client.get<{ id: number; name: string }>(
-      `/users/${id}`,
-      { responseType: 'json' },
-      errorHandler
-    );
-    console.log(response.data);
-  } catch (error) {
-    console.error('Error fetching user:', error);
-  }
+  const response = await client.get<User, UserError>(
+    `/users/${id}`,
+    { responseType: 'json' },
+    errorHandler
+  );
 }
 
 fetchUser(1);
@@ -46,7 +54,7 @@ fetchUser(1);
 
 ## Flexible Error Handling
 
-The `IErrorHandler` interfaces provides template for error handling.  You can customised your `ErrorHandler` to handle suit your needs. It can either return a customised data or throw an error. This allows error objects to be attached and detached as you deem fit.
+The `IErrorHandler` interfaces provides template for error handling.  You can customised your `ErrorHandler` to suit your needs. It can either return a customised error or throw an error or none. This allows error objects to be attached and detached as you deem fit.
 
 ```typescript
 import { IErrorHandler } from "../interfaces/IErrorHandler";
@@ -62,7 +70,7 @@ export class ApiDefaultErrorHandler implements IErrorHandler {
 
 
 export class MyErrorHandler implements IErrorHandler {
-    handleError(error: ErrorContext): any {
+    handleError<ErrorType>(errorContext: ErrorContext): ErrorType | never {
         console.error(`Error in ${error.method} request to ${error.url} with ${error.status}`);
 
         if (error.status == '400') {
@@ -78,7 +86,7 @@ export class MyErrorHandler implements IErrorHandler {
 }
 
 export class UserErrorHandler implements IErrorHandler {
-    handleError(error: ErrorContext): any {
+    handleError<ErrorType>(errorContext: ErrorContext): ErrorType | never {
         console.error(`Error in ${error.method} request to ${error.url} with ${error.status}`);
 
         // ...

@@ -1,6 +1,5 @@
 import { ErrorContext } from "./ErrorContext";
 
-
 export interface IErrorHandler {
-    handleError(error: ErrorContext): unknown;
+    handleError<ErrorType>(error: ErrorContext): ErrorType | never;
 }

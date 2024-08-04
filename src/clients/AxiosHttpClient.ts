@@ -22,7 +22,7 @@ export class AxiosHttpClient implements IHttpClient {
         this.defaultErrorHandler = defaultErrorHandler;
     }
 
-    async request<T>(config: IHttpClientConfig, errorHandler: IErrorHandler = this.defaultErrorHandler): Promise<HttpResponse<T>> {
+    async request<T, E>(config: IHttpClientConfig, errorHandler: IErrorHandler = this.defaultErrorHandler): Promise<HttpResponse<T> | E> {
         const processedConfig = this.applyRequestMiddlewares(config);
 
         try {
@@ -58,7 +58,7 @@ export class AxiosHttpClient implements IHttpClient {
                     url: error.config?.url || '',
                     method: error.config?.method?.toUpperCase() as HttpMethod
                 }
-                return errorHandler.handleError(errorContext) as HttpResponse<T>;
+                return errorHandler.handleError<E>(errorContext);
             }
 
             console.error('Unexpected error:', error);
@@ -66,24 +66,24 @@ export class AxiosHttpClient implements IHttpClient {
         }
     }
 
-    get<T>(url: string, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
-        return this.request<T>({ ...config, method: 'GET', url }, errorHandler);
+    get<T, E>(url: string, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T> | E> {
+        return this.request<T, E>({ ...config, method: 'GET', url }, errorHandler);
     }
 
-    post<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
-        return this.request<T>({ ...config, method: 'POST', url, data }, errorHandler);
+    post<T, E>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T> | E> {
+        return this.request<T, E>({ ...config, method: 'POST', url, data }, errorHandler);
     }
 
-    put<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
-        return this.request<T>({ ...config, method: 'PUT', url, data }, errorHandler);
+    put<T, E>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T> | E> {
+        return this.request<T, E>({ ...config, method: 'PUT', url, data }, errorHandler);
     }
 
-    delete<T>(url: string, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
-        return this.request<T>({ ...config, method: 'DELETE', url }, errorHandler);
+    delete<T, E>(url: string, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T> | E> {
+        return this.request<T, E>({ ...config, method: 'DELETE', url }, errorHandler);
     }
 
-    patch<T>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T>> {
-        return this.request<T>({ ...config, method: 'PATCH', url, data }, errorHandler);
+    patch<T, E>(url: string, data?: unknown, config?: Partial<IHttpClientConfig>, errorHandler?: IErrorHandler): Promise<HttpResponse<T> | E> {
+        return this.request<T, E>({ ...config, method: 'PATCH', url, data }, errorHandler);
     }
 
     addRequestMiddleware(middleware: IRequestMiddleware): void {
